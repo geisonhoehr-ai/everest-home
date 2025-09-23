@@ -1,0 +1,32 @@
+{
+  "name": "everest-home",
+  "version": "1.0.0",
+  "description": "Everest Preparatórios - Página Home Pública",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "14.2.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5",
+    "lucide-react": "^0.263.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^1.14.0"
+  },
+  "keywords": ["everest", "preparatorios", "concursos", "home", "landing"],
+  "author": "Everest Preparatórios",
+  "license": "MIT"
+}
