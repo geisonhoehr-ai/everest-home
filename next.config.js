@@ -11,10 +11,12 @@ const nextConfig = {
     qualities: [25, 50, 75, 90, 100],
   },
 
-  // Otimizações de performance
+  // Otimizações de performance para Mobile
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: ['lucide-react'],
     gzipSize: true,
+    // Otimizações específicas para mobile
+    optimizeServerReact: true,
   },
 
   // Server external packages

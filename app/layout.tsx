@@ -105,7 +105,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://app.pandavideo.com.br" />
         <link rel="dns-prefetch" href="https://vercel.live" />
         
-        {/* CSS Crítico otimizado para melhor LCP */}
+        {/* CSS Crítico otimizado para Mobile - Performance First */}
         <style dangerouslySetInnerHTML={{
           __html: `
             *, *::before, *::after {
@@ -132,7 +132,7 @@ export default function RootLayout({
               flex-direction: column;
             }
 
-            /* Prevenção de CLS */
+            /* Mobile-First: Prevenção de CLS e LCP otimizado */
             .hero-section {
               min-height: 100vh;
               display: flex;
@@ -140,10 +140,31 @@ export default function RootLayout({
               justify-content: center;
             }
 
-            /* Otimizações de performance */
+            /* Otimizações críticas para Mobile */
             img, video {
               max-width: 100%;
               height: auto;
+              content-visibility: auto;
+            }
+
+            /* Lazy loading nativo para imagens */
+            img[loading="lazy"] {
+              content-visibility: auto;
+            }
+
+            /* Otimização de fontes para Mobile */
+            @media (max-width: 768px) {
+              body {
+                font-size: 16px;
+                line-height: 1.4;
+              }
+              
+              /* Reduzir animações em mobile para melhor performance */
+              .animate-spin-slow,
+              .animate-spin-slow-reverse,
+              .animate-pulse {
+                animation-duration: 3s;
+              }
             }
 
             /* Loading spinner crítico */
@@ -159,6 +180,14 @@ export default function RootLayout({
             @keyframes spin {
               0% { transform: rotate(0deg); }
               100% { transform: rotate(360deg); }
+            }
+
+            /* Otimização de renderização para Mobile */
+            @media (max-width: 768px) {
+              .custom-btn {
+                will-change: transform;
+                transform: translateZ(0);
+              }
             }
           `
         }} />

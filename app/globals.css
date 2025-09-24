@@ -552,10 +552,14 @@
   width: 100%;
 }
 
-    /* Botões Mobile com estilo moderno de elevação e anel pulsante */
-    .btn-mobile-orange {
-      min-width: 100px;
-      min-height: 45px;
+/* Botões Mobile otimizados para performance */
+.btn-mobile-orange {
+  min-width: 100px;
+  min-height: 45px;
+  /* Otimizações de performance para mobile */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
   display: inline-flex;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
@@ -636,9 +640,13 @@
       }
     }
 
-    .btn-mobile-blue {
-      min-width: 100px;
-      min-height: 45px;
+.btn-mobile-blue {
+  min-width: 100px;
+  min-height: 45px;
+  /* Otimizações de performance para mobile */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
   display: inline-flex;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
@@ -814,6 +822,42 @@
 
 .animate-led-sweep-purple {
   animation: led-sweep-purple 8s ease-in-out infinite;
+}
+
+/* Otimizações específicas para Mobile Performance */
+@media (max-width: 768px) {
+  /* Reduzir animações em mobile para melhor performance */
+  .animate-spin-slow {
+    animation-duration: 4s;
+  }
+  
+  .animate-spin-slow-reverse {
+    animation-duration: 4s;
+  }
+  
+  .animate-pulse {
+    animation-duration: 2s;
+  }
+  
+  /* Otimizar renderização de botões */
+  .custom-btn {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  
+  /* Reduzir complexidade de gradientes em mobile */
+  .btn-mobile-orange::before,
+  .btn-mobile-blue::before {
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  }
+  
+  /* Otimizar LED effects para mobile */
+  .animate-led-sweep-orange,
+  .animate-led-sweep-blue,
+  .animate-led-sweep-green,
+  .animate-led-sweep-purple {
+    animation-duration: 6s;
+  }
 }
 
 /* Botão desabilitado */

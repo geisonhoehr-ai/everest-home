@@ -88,6 +88,9 @@ function observeMetric(type: string, callback: (metric: any) => void) {
 
 export function WebVitalsMonitor() {
   useEffect(() => {
+    // Verificar se é mobile para otimizar performance
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
+    
     const sendToAnalytics = (metric: WebVitalsMetric) => {
       // Log para desenvolvimento
       if (process.env.NODE_ENV === 'development') {
@@ -111,10 +114,15 @@ export function WebVitalsMonitor() {
       }
     }
 
-    // Monitorar Core Web Vitals usando Performance API nativa
-    observeMetric('LCP', sendToAnalytics)
-    observeMetric('CLS', sendToAnalytics)
-    observeMetric('FCP', sendToAnalytics)
+    // Monitorar apenas LCP em mobile para reduzir overhead
+    if (isMobile) {
+      observeMetric('LCP', sendToAnalytics)
+    } else {
+      // Desktop: monitorar todos os vitals
+      observeMetric('LCP', sendToAnalytics)
+      observeMetric('CLS', sendToAnalytics)
+      observeMetric('FCP', sendToAnalytics)
+    }
 
     // Performance Observer para outras métricas - apenas em produção
     if (typeof window !== 'undefined' && 'PerformanceObserver' in window && process.env.NODE_ENV === 'production') {
