@@ -106,7 +106,7 @@ export default function FlashcardQuantityModal({
               defaultValue={[5]}
               max={maxFlashcards}
               step={1}
-              onValueChange={(value) => {
+              onValueChange={(value: number[]) => {
                 setSelectedQuantity(value[0])
                 setIsCustomQuantity(true)
               }}
