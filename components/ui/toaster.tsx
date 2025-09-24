@@ -8,16 +8,16 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 
 export function Toaster() {
-  const { toasts, removeToast } = useToast()
+  const { toasts, dismiss } = useToast()
 
   return (
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, type, ...props }) {
         return (
-          <Toast key={id} {...props} variant={type === 'error' ? 'destructive' : 'default'}>
+          <Toast key={id} {...props} variant="default">
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
@@ -26,15 +26,10 @@ export function Toaster() {
             </div>
             {action && (
               <div className="ml-auto">
-                <button
-                  onClick={action.onClick}
-                  className="text-sm font-medium hover:underline"
-                >
-                  {action.label}
-                </button>
+                {action}
               </div>
             )}
-            <ToastClose onClick={() => removeToast(id)} />
+            <ToastClose onClick={() => dismiss(id)} />
           </Toast>
         )
       })}

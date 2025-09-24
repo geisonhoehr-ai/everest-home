@@ -4,33 +4,35 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Star, Users, BookOpen, Target, Trophy, Zap, Shield, ArrowRight, Play, Clock, Award, Medal, TrendingUp, BarChart3, Brain, CheckSquare, Moon, Video, FileText, Headphones, MessageCircle, Gift, Bookmark, Calendar, MessageCircle as WhatsApp, X, Check, Instagram, Youtube } from "lucide-react";
-import { PrivacyPolicyModal } from "@/components/privacy-policy-modal";
-import { TermsOfUseModal } from "@/components/terms-of-use-modal";
+import { CheckCircle, Star, Users, BookOpen, Target, Trophy, Zap, Shield, ArrowRight, Play, Clock, Award, Medal, TrendingUp, BarChart3, Brain, CheckSquare, Moon, Video, FileText, Headphones, MessageCircle, Gift, Bookmark, Calendar, MessageCircle as WhatsApp, X, Check, Instagram, Youtube, Menu } from "lucide-react";
+import { Suspense, lazy } from "react";
+// Lazy load modals para reduzir bundle inicial
+const PrivacyPolicyModal = lazy(() => import("@/components/privacy-policy-modal").then(module => ({ default: module.PrivacyPolicyModal })));
+const TermsOfUseModal = lazy(() => import("@/components/terms-of-use-modal").then(module => ({ default: module.TermsOfUseModal })));
 import ProfessorPhoto from "@/components/professor-photo";
 import { YouTubeEmbedOptimized } from "@/components/youtube-embed-optimized";
 import { OptimizedVideo } from "@/components/optimized-video";
 import { MobileVideoStrategy } from "@/components/mobile-video-strategy";
 import { MobileOptimizedImage } from "@/components/mobile-optimized-image";
 import { useState } from "react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerTrigger,
+  DrawerTitle,
+  DrawerDescription,
+} from '@/components/ui/drawer';
 
 export default function LandingPage() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
   return (
     <>
-      {/* Preconnect para recursos externos */}
-      <link rel="preconnect" href="https://www.youtube.com" />
-      <link rel="preconnect" href="https://img.youtube.com" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link rel="preconnect" href="https://hnhzindsfuqnaxosujay.supabase.co" />
-      <link rel="dns-prefetch" href="https://app.pandavideo.com.br" />
       
-      {/* Preload de recursos críticos para LCP */}
-      <link rel="preload" href="/professor-tiago-costa.jpg" as="image" fetchPriority="high" />
       
       {/* CSS Crítico Mobile-First para melhor LCP */}
       <style dangerouslySetInnerHTML={{
@@ -45,65 +47,107 @@ export default function LandingPage() {
         `
       }} />
       
-      <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      <div className="min-h-screen bg-black text-white overflow-x-hidden" aria-hidden="false">
       {/* Conteúdo principal */}
       <div className="relative z-10">
         {/* Header/Navigation */}
         <header className="relative z-50 overflow-hidden">
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-            <div className="flex flex-col sm:flex-row items-center sm:justify-between relative w-full">
-              {/* Logo */}
-              <div className="flex items-center mb-4 sm:mb-0">
-                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
-                  <span className="text-white font-bold text-lg">E</span>
+            <div className="flex flex-row items-center relative w-full">
+              {/* Logo - Canto esquerdo */}
+              <div className="flex items-center flex-shrink-0">
+                <div className="w-10 h-10 mr-3 flex items-center justify-center">
+                  <img 
+                    src="/logo.png" 
+                    alt="Everest Preparatórios" 
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <span className="text-orange-500 font-bold text-xl">Everest Preparatórios</span>
+              </div>
+              
+              {/* Título centralizado - Só aparece em desktop */}
+              <div className="flex-1 flex justify-center hidden md:block">
+                <span className="text-orange-500 font-bold text-xl">EVEREST PREPARATÓRIOS</span>
               </div>
               
               {/* Menu Desktop - Só aparece em telas médias e grandes */}
-              <div className="desktop-menu hidden md:flex items-center space-x-4">
-                <Button 
-                  variant="outline" 
-                  disabled
-                  className="border-gray-500 text-gray-500 cursor-not-allowed opacity-50"
-                >
-                  CIAAR
-                </Button>
+              <div className="desktop-menu hidden md:flex items-center space-x-4 flex-shrink-0">
                 <Link href="https://alunos.everestpreparatorios.com.br/" target="_blank" rel="noopener noreferrer" aria-label="Acessar área do aluno (abre em nova aba)">
-                  <Button variant="outline" className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white">
-                    Área do Aluno
-                  </Button>
+                  <button className="custom-btn btn-3-orange">
+                    <span>Área do Aluno</span>
+                  </button>
                 </Link>
-                <Link href="/login" aria-label="Fazer login na área VIP">
-                  <Button className="bg-orange-500 hover:bg-orange-600">
-                    Área VIP
-                  </Button>
-                </Link>
+                <button className="custom-btn btn-3-blue">
+                  <span>Área VIP</span>
+                </button>
               </div>
 
-              {/* Menu Mobile - Sempre visível em telas pequenas */}
-              <div className="mobile-menu flex md:hidden flex-col items-center space-y-3 w-full px-2 max-w-full">
-                <Button 
-                  variant="outline" 
-                  disabled
-                  className="border-gray-500 text-gray-500 cursor-not-allowed opacity-50 w-full"
-                >
-                  CIAAR
-                </Button>
-                <Link href="https://alunos.everestpreparatorios.com.br/" target="_blank" rel="noopener noreferrer" className="w-full">
-                  <Button variant="outline" className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white w-full">
-                    Área do Aluno
-                  </Button>
-                </Link>
-                <Link href="/login" className="w-full">
-                  <Button className="bg-orange-500 hover:bg-orange-600 w-full max-w-full">
-                    Área VIP
-                  </Button>
-                </Link>
+                  {/* Menu Mobile - Drawer com botão hambúrguer - Canto direito */}
+                  <div className="mobile-menu flex md:hidden items-center flex-shrink-0 ml-auto">
+                    <Drawer 
+                      shouldScaleBackground={false}
+                      open={isDrawerOpen}
+                      onOpenChange={setIsDrawerOpen}
+                    >
+                      <DrawerTrigger asChild>
+                        <button 
+                          className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors"
+                          aria-label="Abrir menu de navegação"
+                          aria-expanded={isDrawerOpen}
+                          aria-controls="mobile-navigation-drawer"
+                          role="button"
+                        >
+                          <Menu className="h-6 w-6 text-white" aria-hidden="true" />
+                        </button>
+                      </DrawerTrigger>
+                  <DrawerContent 
+                    id="mobile-navigation-drawer"
+                    className="bg-black border-t border-gray-800"
+                  >
+                    {/* Título e descrição para acessibilidade - visualmente ocultos */}
+                    <DrawerTitle className="sr-only">Menu de Navegação</DrawerTitle>
+                    <DrawerDescription className="sr-only">Acesse as áreas do aluno e VIP</DrawerDescription>
+                    
+                    <div className="mx-auto w-full max-w-md px-4 py-6">
+                      <div className="flex items-center space-x-3">
+                        {/* Foto do Tiago apontando para os botões */}
+                        <div className="flex-shrink-0">
+                          <img 
+                            src="/tiago-menu.jpg" 
+                            alt="Professor Tiago Costa" 
+                            className="w-16 h-16 rounded-full object-cover object-top border-2 border-orange-500"
+                          />
+                        </div>
+                        
+                        {/* Botões lado a lado */}
+                        <div className="flex flex-row space-x-2 flex-1 min-w-0">
+                          <Link href="https://alunos.everestpreparatorios.com.br/" target="_blank" rel="noopener noreferrer" className="flex-1 min-w-0">
+                            <button className="custom-btn btn-mobile-orange w-full text-xs">
+                              <span>Área do Aluno</span>
+                            </button>
+                          </Link>
+                          <div className="flex-1 min-w-0">
+                            <button className="custom-btn btn-mobile-blue w-full text-xs">
+                              <span>Área VIP</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </DrawerContent>
+                </Drawer>
               </div>
             </div>
           </nav>
         </header>
+
+        {/* LED Light Bar - Luz fina de LED com cores alternadas */}
+        <div className="relative w-full h-1 bg-black overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-80 animate-led-sweep-orange"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-80 animate-led-sweep-blue"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-green-500 to-transparent opacity-80 animate-led-sweep-green"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-80 animate-led-sweep-purple"></div>
+        </div>
 
         {/* Hero Section */}
         <section className="relative py-12 sm:py-16 md:py-20 overflow-hidden">
@@ -1613,17 +1657,21 @@ export default function LandingPage() {
       </div>
 
 
-        {/* Modal de Política de Privacidade */}
-        <PrivacyPolicyModal 
-          isOpen={isPrivacyModalOpen}
-          onClose={() => setIsPrivacyModalOpen(false)}
-        />
-
-        {/* Modal de Termos de Uso */}
-        <TermsOfUseModal 
-          isOpen={isTermsModalOpen}
-          onClose={() => setIsTermsModalOpen(false)}
-        />
+        {/* Modais com lazy loading */}
+        <Suspense fallback={null}>
+          {isPrivacyModalOpen && (
+            <PrivacyPolicyModal
+              isOpen={isPrivacyModalOpen}
+              onClose={() => setIsPrivacyModalOpen(false)}
+            />
+          )}
+          {isTermsModalOpen && (
+            <TermsOfUseModal
+              isOpen={isTermsModalOpen}
+              onClose={() => setIsTermsModalOpen(false)}
+            />
+          )}
+        </Suspense>
 
         {/* Modal do Telegram */}
         {isTelegramModalOpen && (
